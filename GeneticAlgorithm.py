@@ -8,7 +8,7 @@ MUTATION_RATE = 0.15
 # Amount of times two prisoners are subjugated to the dilemma per generation.
 TESTS_PER_GENERATION = 5
 # Number of generations to be performed.
-MAX_GENERATIONS = 10
+MAX_GENERATIONS = 50
 # Seed for this particular simulation.
 SEED = 15486277
 
@@ -153,6 +153,28 @@ def cost(prisoners, costs, i, j):
     else:
         costs[i], costs[j] = 1 + costs[i], 1 + costs[j]
 
+"""
+Calculates a rolling average, averaging values as it is called.
+The first call to 'rolling_average' sets up the rolling average closure.
+@return Inner function
+
+Inner function
+Calls without parameters will just return the average.
+@param [next] Next value to be averaged into the rolling average.
+@return Current rolling average, after averaging the specified value.
+"""
+def rolling_average():
+    count = 0
+    avg = None
+    def roll(next = None):
+        nonlocal count
+        nonlocal avg
+        if next != None:
+            avg = next if count <= 0 else avg + (next - avg) / (count + 1.0)
+            count += 1
+        return avg
+    return roll
+
 def main():
     print("Starting up.")
     if MUTATION_RATE < 0 or MUTATION_RATE > 1:
@@ -161,16 +183,17 @@ def main():
         raise ValueError("Initial population of {} must a positive number and a multiple of four".format(str(PRISONER_POP)))
     seed(SEED)
     
+    # Indicates the status of the current population.
     def assess_pop(pop_list):
-        rolling_avg = None
+        roll_avg_align = rolling_average()
+        roll_avg_age = rolling_average()
+        
         for i in range(PRISONER_POP):
             p = pop_list[i]
-            a = p.get_alignment()
-            if rolling_avg != None:
-                rolling_avg = rolling_avg + (a - rolling_avg) / (i + 1.0)
-            else:
-                rolling_avg = a
-        print("Average defection rate: {}%".format(str(rolling_avg / ALIGNMENT_MAX)))
+            roll_avg_align(p.get_alignment())
+            roll_avg_age(p.get_age())
+        print("Average defection rate: {}%".format(str(roll_avg_align() / ALIGNMENT_MAX)))
+        print("Average prisoner age  : {}".format(str(roll_avg_age())))
     
     # Cost for each prisoner's decisions.
     costs = [0] * PRISONER_POP
@@ -198,7 +221,7 @@ def main():
         # Sort prisoner population by weight.
         order = {v:i for i,v in enumerate(population)}
         population.sort(key=lambda x: costs[order[x]])
-        
+    
         # Destroy half of the population -- Repopulate them randomly.
         cutoff_i = PRISONER_POP // 2
         for j in range(0, cutoff_i, 2):
@@ -215,6 +238,3 @@ def main():
     
     print("Terminating.")
 main()
-
-
-
