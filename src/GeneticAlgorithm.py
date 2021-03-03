@@ -37,14 +37,6 @@ PROGRAM_NAME = "GeneticAlgorithm"
 _print = print
 def print(x):
     _print("{}: {}".format(PROGRAM_NAME, str(x)))
-    
-"""
-Source: https://stackoverflow.com/a/10322018/4718288
-@param n Integer to be parsed as a bitfield. Cannot be negative.
-@return Bitfield of the passed integer, not including the sign bit.
-"""
-def bitfield(n):
-    return [1 if digit=='1' else 0 for digit in bin(n)[2:]] # [2:] to chop off the "0b" part
 
 """
 Performs the cost function on the group of prisoners.
