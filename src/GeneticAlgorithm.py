@@ -1,4 +1,20 @@
+"""
+Simulates and attempts to solve the prisoner's dilemma using a genetic algorithm.
+    Copyright (C) 2021  Kevin Tyrrell
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 
 from random import seed, randrange, getrandbits, random, shuffle
 from sys import maxsize
@@ -16,8 +32,7 @@ SEED = 155966
 
 # Name of the program.
 PROGRAM_NAME = "GeneticAlgorithm"
-# 2 raised to the power of the maximum number of bits in Prisoner's alignments.
-ALIGNMENT_MAX = 2 ** 32
+
 
 _print = print
 def print(x):
@@ -30,102 +45,6 @@ Source: https://stackoverflow.com/a/10322018/4718288
 """
 def bitfield(n):
     return [1 if digit=='1' else 0 for digit in bin(n)[2:]] # [2:] to chop off the "0b" part
-    
-# Defines a prisoner, who must decide whether to defect or to cooperate.
-class Prisoner:
-    """
-    If no alignment is specified, the prisoner is assigned a random alignment.
-    @param [alignment] Likelihood to defect, ranging from [0, ALIGNMENT_MAX).
-    @field __alignment
-    @field __age Number of generations of offspring of the prisoner.
-    """
-    def __init__(self, alignment = None):
-        if alignment == None:
-            self.__alignment = randrange(ALIGNMENT_MAX)
-        elif isinstance(alignment, int):
-            if alignment >= ALIGNMENT_MAX or alignment < 0:
-                raise ValueError("Alignment of {} was out of bounds [0, ALIGNMENT_MAX)".format(str(alignment)))
-            self.__alignment = alignment
-        else:
-            raise TypeError("Alignment must be an integer")
-        self.__age = 0
-    """
-    A prisoner decision to defect is by chance, but is influenced
-    by his alignment (whether he favors defecting or not).
-    @return True if the prisoner decides to defect.
-    """
-    def defect(self):
-        return randrange(ALIGNMENT_MAX) < self.__alignment
-    """
-    Performs a crossover with another Prisoner.
-    @param other_prisoner Prisoner to perform the crossover reproduction with.
-    @return Tuple of two prisoners, with alignments similar to their parents.
-    """
-    def crossover(self, other_prisoner):
-        if not isinstance(other_prisoner, Prisoner):
-            raise TypeError("Expected Prisoner instance, received: {}".format(type(other_prisoner)))
-        if self == other_prisoner:
-            raise ValueError("Prisoner cannot crossover with itself")
-        
-        bf1 = bitfield(self.__alignment)
-        bf2 = bitfield(other_prisoner.__alignment)
-        bf1_len, bf2_len = len(bf1), len(bf2)
-        bf_cross_len = min(bf1_len, bf2_len)
-        
-        c1_align, c2_align, decimal, bit = 0, 0, 1, 0
-        
-        # Helper function for random mutations.
-        def mutator(bit):
-            return 1 - bit if random() < MUTATION_RATE else bit
-        # Helper function for fast conversion from binary.
-        def adder(bit_1, bit_2):
-            bit_1 = mutator(bit_1)
-            bit_2 = mutator(bit_2)
-            if bit_1:
-                nonlocal c1_align
-                c1_align += decimal
-            if bit_2:
-                nonlocal c2_align
-                c2_align += decimal
-        # Helper function for fast swapping of bits.
-        def crosser(bit_1, bit_2):
-            if bool(getrandbits(1)):
-                adder(bit_2, bit_1)
-            else:
-                adder(bit_1, bit_2)
-        
-        # Iterate over all bits, crossing them or mutating them at random.
-        # Afterwards, return two new Prisoner children with those alignments.
-        while bit < bf_cross_len:
-            crosser(bf1[-bit - 1], bf2[-bit - 1])
-            bit += 1
-            decimal += decimal
-        while bit < bf1_len:
-            crosser(bf1[-bit - 1], 0)
-            bit += 1
-            decimal += decimal
-        while bit < bf2_len:
-            crosser(0, bf2[-bit - 1])
-            bit += 1
-            decimal += decimal
-        self.__age += 1
-        other_prisoner.__age += 1
-        return (Prisoner(c1_align), Prisoner(c2_align))
-    """
-    @return Likelihood to defect, ranging from [0, ALIGNMENT_MAX).
-    """
-    def get_alignment(self):
-        return self.__alignment
-    """
-    @return Number of generations of offspring of the prisoner.
-    """
-    def get_age(self):
-        return self.__age
-    """
-    @return String representation of the prisoner.
-    """
-    def __str__(self):
-        return "Prisoner{{age={}, alignment={}}}".format(str(self.__age), str(self.__alignment))
 
 """
 Performs the cost function on the group of prisoners.
