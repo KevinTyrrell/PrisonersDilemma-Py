@@ -1,21 +1,23 @@
+
+
 from random import seed, randrange, getrandbits, random, shuffle
 from sys import maxsize
 
 # How many prisoners in the simulation.
-PRISONER_POP = 100
+PRISONER_POP = 1000
 # How often mutations occur while copying each gene-bit.
 MUTATION_RATE = 0.15
 # Amount of times two prisoners are subjugated to the dilemma per generation.
-TESTS_PER_GENERATION = 5
+TESTS_PER_GENERATION = 3
 # Number of generations to be performed.
-MAX_GENERATIONS = 50
+MAX_GENERATIONS = 100
 # Seed for this particular simulation.
-SEED = 15486277
+SEED = 155966
 
 # Name of the program.
 PROGRAM_NAME = "GeneticAlgorithm"
-# 10 raised to the significant digits of the prisoner's alignment float.
-ALIGNMENT_MAX = 100000000
+# 2 raised to the power of the maximum number of bits in Prisoner's alignments.
+ALIGNMENT_MAX = 2 ** 32
 
 _print = print
 def print(x):
