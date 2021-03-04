@@ -28,7 +28,7 @@ parser.add_argument("-g", "--gen", dest="generations", default=100, type=int,
                     help="Specifies the number of generations which should be simulated.")
 parser.add_argument("-m", "--mut", dest="mutation_rate", default=0.15, type=float,
                     help="Specifies the rate in which mutations occur in each genome.")
-parser.add_argument("-t", "--tests", dest="tests", default=3, type=int,
+parser.add_argument("-t", "--tests", dest="tests", default=10, type=int,
                     help="Specifies the number of tests the prisoners are subjected to per generation.")
 parser.add_argument("-s", "--seed", dest="seed", default=(561 * 1105 * 1729), type=int,
                     help="Specifies the random number generator seed to be used.")

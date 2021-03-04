@@ -50,6 +50,9 @@ class Prisoner:
     def defect(self) -> bool:
         return randrange(Prisoner.__MAX_ALIGNMENT) < self.__genome.genes
 
+    def mature(self) -> None:
+        self.__age += 1
+
     """
     @:return Likelihood to defect, ranging from [0, __MAX_ALIGNMENT].
     """

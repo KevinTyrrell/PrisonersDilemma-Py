@@ -21,6 +21,7 @@ from typing import List
 from Prisoner import Prisoner
 from Genome import Genome
 from Genetics import Genetics
+from RollingAverage import RollingAverage
 
 
 class Simulation:
@@ -30,12 +31,14 @@ class Simulation:
 
         # Population of prisoners -- modified each generation.
         prisoners = [Prisoner(Genome()) for _ in range(population)]
-        # Controls mutation, crossover, and repopulation.
+        # Controls mutation, crossover, and re-population.
         genetics = Genetics(mutation_rate)
 
         for generation in range(0, generations):
             costs = [0] * population  # Initialize costs to zero each generation.
             random.shuffle(prisoners)  # De-segregate parents and children.
+
+            Simulation.__assess_population(prisoners, generation)
 
             # Group up each prisoner with a random unique partner.
             for i in range(0, population, 2):
@@ -57,13 +60,28 @@ class Simulation:
                 prisoners[cutoff_limit + i] = child
                 i += 1
 
-            while i in range(0, population):  # Loop incremented via callback.
+            while i in range(0, cutoff_limit):  # Loop incremented via callback.
                 j = random.randrange(i + 1, cutoff_limit)
                 mother, father = prisoners[i], prisoners[j]
+                mother.mature()
+                father.mature()
                 # Switch the father with the mother's right neighbor.
                 prisoners[j] = prisoners[i + 1]
                 prisoners[i + 1] = father
                 genetics.conceive(mother.genome, father.genome, born_child_cb)
+
+    @staticmethod
+    def __assess_population(prisoners: List[Prisoner], generation: int) -> None:
+        align_avg = RollingAverage()
+        age_avg = RollingAverage()
+
+        for prisoner in prisoners:
+            align_avg.next(prisoner.alignment)
+            age_avg.next(prisoner.age)
+
+        print("{1} Generation #{0} {1}".format(generation, ("~" * 6)))
+        print("Average Defection (%){:.2f}".format(align_avg.average * 100))
+        print("Average Prisoner Age {:.3f}".format(age_avg.average))
 
     __COOPERATION_COST, __DEFECTION_COST, __BETRAYAL_COST = 1, 2, 3
 
