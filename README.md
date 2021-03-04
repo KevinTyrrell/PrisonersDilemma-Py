@@ -1,8 +1,8 @@
 
-<br /><h3 align="center">Prisoner\'s Dilemma - Python</h3>
+<h3 align="center">Prisoner's Dilemma - Python</h3>
 
   <p align="center">
-  Attempts to teach a group of prisoners how to solve the <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">Prisoner's Dilemma</a> problem using genetic algorithms.
+  (2018) Attempts to solve the <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">Prisoner's Dilemma</a> problem using genetic algorithms.
     <br />
 	<br />
   </p>
