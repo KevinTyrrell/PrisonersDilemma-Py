@@ -68,6 +68,7 @@ optional arguments:
 * **Tests**: 20 (number of trials to subject prisoners to the Prisoner\'s Dilemma)
 * **Seed**: 23915871
 
+
     ~~~~~~ Generation #0 ~~~~~~
     Average Defection (%)29.83
     Average Prisoner Age 0.000
@@ -83,7 +84,10 @@ optional arguments:
     ~~~~~~ Generation #4 ~~~~~~
     Average Defection (%)44.04
     Average Prisoner Age 0.922
+	
+	
 *Generations #5 -> #45 Omitted ([see-below](#Takeaways))*
+
 
     ~~~~~~ Generation #45 ~~~~~~
     Average Defection (%)96.38
@@ -100,6 +104,7 @@ optional arguments:
     ~~~~~~ Generation #49 ~~~~~~
     Average Defection (%)95.69
     Average Prisoner Age 1.168
+
 
 #### Takeaways
 
