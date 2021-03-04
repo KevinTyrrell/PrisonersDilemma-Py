@@ -16,21 +16,22 @@ Simulates and attempts to solve the prisoner's dilemma using a genetic algorithm
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from argparse import ArgumentParser
+import argparse
 from Simulation import Simulation
 
-parser = ArgumentParser(description="Attempts to teach a population of prisoners"
-                                    " (agents) how to solve the Prisoner's Dilemma",
-                        epilog="https://github.com/KevinTyrrell/PrisonersDilemma-Py")
-parser.add_argument("-p", "--pop", dest="population", default=2 ** 10, type=int,
+parser = argparse.ArgumentParser(description="Attempts to teach a population of prisoners"
+                                             " (agents) how to solve the Prisoner's Dilemma",
+                                 epilog="https://github.com/KevinTyrrell/PrisonersDilemma-Py",
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("-p", dest="population", default=2 ** 10, type=int,
                     help="Specifies the population size for the group of prisoners.")
-parser.add_argument("-g", "--gen", dest="generations", default=100, type=int,
+parser.add_argument("-g", dest="generations", default=100, type=int,
                     help="Specifies the number of generations which should be simulated.")
-parser.add_argument("-m", "--mut", dest="mutation_rate", default=0.15, type=float,
+parser.add_argument("-m", dest="mutation_rate", default=0.15, type=float,
                     help="Specifies the rate in which mutations occur in each genome.")
-parser.add_argument("-t", "--tests", dest="tests", default=10, type=int,
+parser.add_argument("-t", dest="tests", default=10, type=int,
                     help="Specifies the number of tests the prisoners are subjected to per generation.")
-parser.add_argument("-s", "--seed", dest="seed", default=(561 * 1105 * 1729), type=int,
+parser.add_argument("-s", dest="seed", default=(561 * 1105 * 1729), type=int,
                     help="Specifies the random number generator seed to be used.")
 
 
