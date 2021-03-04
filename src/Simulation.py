@@ -19,12 +19,51 @@ Simulates and attempts to solve the prisoner's dilemma using a genetic algorithm
 import random
 from typing import List
 from Prisoner import Prisoner
+from Genome import Genome
+from Genetics import Genetics
 
 
 class Simulation:
     @staticmethod
     def run(population: int, generations: int, mutation_rate: float, tests: int, seed: int) -> None:
         random.seed(seed)
+
+        # Population of prisoners -- modified each generation.
+        prisoners = [Prisoner(Genome()) for _ in range(population)]
+        # Controls mutation, crossover, and repopulation.
+        genetics = Genetics(mutation_rate)
+
+        for generation in range(0, generations):
+            costs = [0] * population  # Initialize costs to zero each generation.
+            random.shuffle(prisoners)  # De-segregate parents and children.
+
+            # Group up each prisoner with a random unique partner.
+            for i in range(0, population, 2):
+                # Perform the prisoner's dilemma test with the two subjects N times.
+                for k in range(0, tests):
+                    Simulation.__cost(prisoners, costs, i, i + 1)
+
+            # Sort the prisoners by cost, in ascending order.
+            order = {v: i for i, v in enumerate(prisoners)}
+            prisoners.sort(key=lambda x: costs[order[x]])
+
+            i = 0
+            cutoff_limit = population // 2
+
+            # Called when a new child is born and added to the population.
+            def born_child_cb(child: Prisoner) -> None:
+                nonlocal i
+                # Replace an under-performing prisoner with a new child.
+                prisoners[cutoff_limit + i] = child
+                i += 1
+
+            while i in range(0, population):  # Loop incremented via callback.
+                j = random.randrange(i + 1, cutoff_limit)
+                mother, father = prisoners[i], prisoners[j]
+                # Switch the father with the mother's right neighbor.
+                prisoners[j] = prisoners[i + 1]
+                prisoners[i + 1] = father
+                genetics.conceive(mother.genome, father.genome, born_child_cb)
 
     __COOPERATION_COST, __DEFECTION_COST, __BETRAYAL_COST = 1, 2, 3
 
@@ -56,63 +95,3 @@ class Simulation:
         else:
             costs[p1] += Simulation.__COOPERATION_COST
             costs[p2] += Simulation.__COOPERATION_COST
-
-
-#     if MUTATION_RATE < 0 or MUTATION_RATE > 1:
-#         raise ValueError("Mutation rate of {} is not within acceptable bounds of [0.0, 1.0]".format(str(MUTATION_RATE)))
-#     if PRISONER_POP <= 0 or PRISONER_POP % 4 != 0:
-#         raise ValueError("Initial population of {} must a positive number and a multiple of four".format(str(PRISONER_POP)))
-#     seed(SEED)
-#
-#     # Indicates the status of the current population.
-#     def assess_pop(pop_list):
-#         roll_avg_align = rolling_average()
-#         roll_avg_age = rolling_average()
-#
-#         for i in range(PRISONER_POP):
-#             p = pop_list[i]
-#             roll_avg_align(p.get_alignment())
-#             roll_avg_age(p.get_age())
-#         print("Average defection rate: {}%".format(str(roll_avg_align() / ALIGNMENT_MAX)))
-#         print("Average prisoner age  : {}".format(str(roll_avg_age())))
-#
-#     # Cost for each prisoner's decisions.
-#     costs = [0] * PRISONER_POP
-#     population = [None] * PRISONER_POP
-#     for i in range(PRISONER_POP):
-#         population[i] = Prisoner()
-#
-#     for i in range(MAX_GENERATIONS):
-#         print("--- Generation: {} ---".format(str(i)))
-#         assess_pop(population)
-#
-#         for j in range(PRISONER_POP):
-#             costs[j] = 0
-#         for j in range(TESTS_PER_GENERATION):
-#             # Shuffle both lists to 'smooth out' results.
-#             temp_seed = randrange(maxsize)
-#             seed(temp_seed)
-#             shuffle(population)
-#             if j > 0: # No need to shuffle costs if it's the first test.
-#                 seed(temp_seed)
-#                 shuffle(costs)
-#             for k in range(0, PRISONER_POP, 2):
-#                 cost(population, costs, k, k + 1)
-#
-#         # Sort prisoner population by weight.
-#         order = {v:i for i,v in enumerate(population)}
-#         population.sort(key=lambda x: costs[order[x]])
-#
-#         # Destroy half of the population -- Repopulate them randomly.
-#         cutoff_i = PRISONER_POP // 2
-#         for j in range(0, cutoff_i, 2):
-#             # Father is j, choose mother randomly among the population.
-#             mother_i = randrange(j + 1, cutoff_i)
-#             mother = population[mother_i]
-#             children = mother.crossover(population[j])
-#             # Replace two of the underperforming prisoners with two children.
-#             population[cutoff_i + j] = children[0]
-#             population[cutoff_i + j + 1] = children[1]
-#             # Swap the mother with whatever is to the right of the father.
-#             population[mother_i] = population[j + 1]
-#             population[j + 1] = mother

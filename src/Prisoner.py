@@ -63,6 +63,14 @@ class Prisoner:
     @property
     def age(self) -> int:
         return self.__age
+
+    """
+    @:return genome: Genome of the prisoner.
+    """
+    @property
+    def genome(self) -> Genome:
+        return self.__genome
+
     """
     @:return String representation of the prisoner.
     """

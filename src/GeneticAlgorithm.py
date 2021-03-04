@@ -22,7 +22,7 @@ from Simulation import Simulation
 parser = ArgumentParser(description="Attempts to teach a population of prisoners"
                                     " (agents) how to solve the Prisoner's Dilemma",
                         epilog="https://github.com/KevinTyrrell/PrisonersDilemma-Py")
-parser.add_argument("-p", "--pop", dest="population", default=1000, type=int,
+parser.add_argument("-p", "--pop", dest="population", default=2 ** 10, type=int,
                     help="Specifies the population size for the group of prisoners.")
 parser.add_argument("-g", "--gen", dest="generations", default=100, type=int,
                     help="Specifies the number of generations which should be simulated.")
