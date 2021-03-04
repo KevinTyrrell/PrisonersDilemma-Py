@@ -34,9 +34,11 @@ parser.add_argument("-g", "--gen", dest="generations", default=100, type=int,
 parser.add_argument("-t", "--tests", dest="tests", default=3, type=int,
                     help="Specifies the number of tests the prisoners are subjected to per generation.")
 
-
 # Check the user's arguments to ensure their validity.
 args = parser.parse_args()
+
+
+
 
 
 
@@ -67,28 +69,6 @@ def cost(prisoners, costs, i, j):
         costs[j] = 3 + costs[j]
     else:
         costs[i], costs[j] = 1 + costs[i], 1 + costs[j]
-
-"""
-Calculates a rolling average, averaging values as it is called.
-The first call to 'rolling_average' sets up the rolling average closure.
-@return Inner function
-
-Inner function
-Calls without parameters will just return the average.
-@param [next] Next value to be averaged into the rolling average.
-@return Current rolling average, after averaging the specified value.
-"""
-def rolling_average():
-    count = 0
-    avg = None
-    def roll(next = None):
-        nonlocal count
-        nonlocal avg
-        if next != None:
-            avg = next if count <= 0 else avg + (next - avg) / (count + 1.0)
-            count += 1
-        return avg
-    return roll
 
 def main():
     print("Starting up.")
