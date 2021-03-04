@@ -16,27 +16,29 @@ Simulates and attempts to solve the prisoner's dilemma using a genetic algorithm
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from random import seed, randrange, getrandbits, random, shuffle
+from argparse import ArgumentParser
+from random import seed, randrange, shuffle
 from sys import maxsize
 
-# How many prisoners in the simulation.
-PRISONER_POP = 1000
-# How often mutations occur while copying each gene-bit.
-MUTATION_RATE = 0.15
-# Amount of times two prisoners are subjugated to the dilemma per generation.
-TESTS_PER_GENERATION = 3
-# Number of generations to be performed.
-MAX_GENERATIONS = 100
-# Seed for this particular simulation.
-SEED = 155966
+parser = ArgumentParser(description="Attempts to teach a population of prisoners"
+                                    " (agents) how to solve the Prisoner's Dilemma",
+                        epilog="https://github.com/KevinTyrrell/PrisonersDilemma-Py")
+parser.add_argument("-p", "--pop", dest="population", default=1000, type=int,
+                    help="Specifies the population size for the group of prisoners.")
+parser.add_argument("-m", "--mut", dest="mutation_rate", default=0.15, type=float,
+                    help="Specifies the rate in which mutations occur in each genome.")
+parser.add_argument("-s", "--seed", dest="seed", default=(561 * 1105 * 1729), type=int,
+                    help="Specifies the random number generator seed to be used.")
+parser.add_argument("-g", "--gen", dest="generations", default=100, type=int,
+                    help="Specifies the number of generations which should be simulated.")
+parser.add_argument("-t", "--tests", dest="tests", default=3, type=int,
+                    help="Specifies the number of tests the prisoners are subjected to per generation.")
 
-# Name of the program.
-PROGRAM_NAME = "GeneticAlgorithm"
+
+# Check the user's arguments to ensure their validity.
+args = parser.parse_args()
 
 
-_print = print
-def print(x):
-    _print("{}: {}".format(PROGRAM_NAME, str(x)))
 
 """
 Performs the cost function on the group of prisoners.

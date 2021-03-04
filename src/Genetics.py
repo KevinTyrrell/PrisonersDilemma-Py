@@ -23,9 +23,7 @@ from Genome import Genome
 
 
 class Genetics:
-    __DEFAULT_MUTATION_RATE = 0.05
-
-    def __init__(self, mutation_rate: float = __DEFAULT_MUTATION_RATE):
+    def __init__(self, mutation_rate: float):
         if mutation_rate < 0.0 or mutation_rate > 1.0:
             raise ValueError("Mutation rate of {} must be of the domain [0.0, 1.0]".format(mutation_rate))
         self.__mutation_rate = mutation_rate
