@@ -68,6 +68,7 @@ optional arguments:
 * **Tests**: 20 (number of trials to subject prisoners to the Prisoner\'s Dilemma)
 * **Seed**: 23915871
 
+----
 
     ~~~~~~ Generation #0 ~~~~~~
     Average Defection (%)29.83
@@ -84,10 +85,8 @@ optional arguments:
     ~~~~~~ Generation #4 ~~~~~~
     Average Defection (%)44.04
     Average Prisoner Age 0.922
-	
-	
-*Generations #5 -> #45 Omitted ([see-below](#Takeaways))*
 
+*Generations #5 -> #45 Omitted (Full Output: [Git Gist](https://gist.github.com/KevinTyrrell/a86f81f24ae49fd0de8c21fa090fc012))*
 
     ~~~~~~ Generation #45 ~~~~~~
     Average Defection (%)96.38
@@ -105,10 +104,9 @@ optional arguments:
     Average Defection (%)95.69
     Average Prisoner Age 1.168
 
+---
 
 #### Takeaways
-
-*Full Output (Generations #0 -> #49) -> [Git Gist](https://gist.github.com/KevinTyrrell/a86f81f24ae49fd0de8c21fa090fc012)*
 
 * Defection rate is approaching `100%`, but cannot reach it due to negative mutations.
 * Average age should remain low due to half of the population being culled each generation, however it seems like very few prisoner live past the age of 3. Perhaps with more generatios, this number would increase.
