@@ -106,11 +106,11 @@ optional arguments:
 
 ---
 
-#### Takeaways
+#### Example Training Takeaways
 
-* Defection rate is approaching `100%`, but cannot reach it due to negative mutations.
-* Average age should remain low due to half of the population being culled each generation, however it seems like very few prisoner live past the age of 3. Perhaps with more generatios, this number would increase.
-* Increasing the number of tests per generation seems to dramatically speed up the learning process, as it makes the cost function much more accurate.
+* Defection rate approaches `100%`, however poor mutations stunt further overall-progress.
+* Low average age is normal, due to half of the population having an age of `0` (new-born). However it appears as if ancestors are being culled before reaching high ages of maturity. Perhaps with far more generations, the average age would rise.
+* Raising the number of Prisoner\'s Dilemma tests per generation seems to dramatically speed up the learning process. Fewer better-performing prisoners are culled by mistake, and thus the population develops faster.
 * By generation `15`, over `90%` of the population choses to defect. Over the next `35` generations, this is only refined by ~`5%`.
 
 
